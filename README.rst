@@ -9,7 +9,7 @@ pipecash-agents
 .. image:: https://img.shields.io/travis/Pipe-Cash/pipecashagents.svg
         :target: https://travis-ci.org/Pipe-Cash/pipecashagents
 
-.. image:: https://readthedocs.org/projects/pipecash-agents/badge/?version=latest
+.. image:: https://readthedocs.org/projects/pipecashagents/badge/?version=latest
         :target: https://pipecash-agents.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
