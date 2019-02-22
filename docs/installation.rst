@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install pipecash-agents, run this command in your terminal:
+To install pipecashagents, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install pipecashagents
 
-This is the preferred method to install pipecash-agents, as it will always install the most recent stable release.
+This is the preferred method to install pipecashagents, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,7 +26,7 @@ you through the process.
 From sources
 ------------
 
-The sources for pipecash-agents can be downloaded from the `Github repo`_.
+The sources for pipecashagents can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 

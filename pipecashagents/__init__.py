@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for pipecash-agents."""
+"""Top-level package for pipecashagents."""
 
 __author__ = """Aleksandar Nikolaev Dinkov"""
 __email__ = 'alexander.n.dinkov@gmail.com'

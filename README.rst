@@ -1,5 +1,5 @@
 ===============
-pipecash-agents
+pipecashagents
 ===============
 
 
@@ -10,7 +10,7 @@ pipecash-agents
         :target: https://travis-ci.org/Pipe-Cash/pipecashagents
 
 .. image:: https://readthedocs.org/projects/pipecashagents/badge/?version=latest
-        :target: https://pipecash-agents.readthedocs.io/en/latest/?badge=latest
+        :target: https://pipecashagents.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
@@ -24,7 +24,7 @@ A collection of common agents used in PipeCash. Learn more about PipeCash on htt
 
 
 * Free software: MIT license
-* Documentation: https://pipecash-agents.readthedocs.io.
+* Documentation: https://pipecashagents.readthedocs.io.
 
 
 

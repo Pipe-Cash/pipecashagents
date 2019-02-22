@@ -47,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'pipecash-agents'
+project = u'pipecashagents'
 copyright = u"2019, Aleksandar Nikolaev Dinkov"
 author = u"Aleksandar Nikolaev Dinkov"
 
@@ -129,7 +129,7 @@ latex_elements = {
 # [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'pipecashagents.tex',
-     u'pipecash-agents Documentation',
+     u'pipecashagents Documentation',
      u'Aleksandar Nikolaev Dinkov', 'manual'),
 ]
 
@@ -140,7 +140,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'pipecashagents',
-     u'pipecash-agents Documentation',
+     u'pipecashagents Documentation',
      [author], 1)
 ]
 
@@ -152,7 +152,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'pipecashagents',
-     u'pipecash-agents Documentation',
+     u'pipecashagents Documentation',
      author,
      'pipecashagents',
      'One line description of project.',

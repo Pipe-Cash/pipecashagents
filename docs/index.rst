@@ -1,4 +1,4 @@
-Welcome to pipecash-agents's documentation!
+Welcome to pipecashagents's documentation!
 ======================================
 
 .. toctree::

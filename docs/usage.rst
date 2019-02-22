@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use pipecash-agents in a project::
+To use pipecashagents in a project::
 
     import pipecashagents
