@@ -6,7 +6,7 @@ class Email_Send:
     Provide the secret variables to connect to your email provider.
     '''
 
-    event_description = "{ 'state': 'success' }"
+    event_description = { 'state': 'success' }
 
     default_options = {
         'title':'',

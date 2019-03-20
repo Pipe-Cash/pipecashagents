@@ -14,12 +14,12 @@ class Binance_Buy:
     the actor will attempt to sell 2 Bitcoin SV for as much BTC as it is currently exchanged for.
     '''
 
-    event_description = str({
+    event_description = {
         'state': 'success',
         'bought':'BTC',
         'amount': 1.0,
         'pair': 'BTCUSDT'
-    })
+    }
 
     default_options = {
         'amount': -1,
@@ -45,11 +45,11 @@ class Binance_GetBalance:
     Specify your Binance connection data in the secret values.
     '''
 
-    event_description = str({
+    event_description = {
         'state': 'success',
         'ticker':'BCHSV',
         'balance': 1.012
-    })
+    }
 
     default_options = {
         'ticker': 'BCHSV'
@@ -79,11 +79,11 @@ class Binance_Withdraw:
     Specify your Binance connection data in the secret values.
     '''
 
-    event_description = str({
+    event_description = {
         'state': 'success',
         'ticker':'BCHSV',
         'withdrawn': 1.0
-    })
+    }
 
     default_options = {
         'ticker': 'BCHSV',
