@@ -4,10 +4,10 @@ class WalletAgent_OnBalanceChange:
 
     description = '''Monitors the associated wallet for any change in the available funds.'''
 
-    event_description = str({
+    event_description = {
         'balance': 14.14234,
         'balanceDiff': -3.1342,
-    })
+    }
 
     def __init__(self):
         self.wallet = None
@@ -35,9 +35,9 @@ class WalletAgent_GetReceiveAddress:
 
     description = '''Asks the associated wallet for a receive address.'''
 
-    event_description = str({
+    event_description = {
         'address': '<the address>',
-    })
+    }
 
     def __init__(self):
         self.wallet = None

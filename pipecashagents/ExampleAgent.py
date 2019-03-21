@@ -60,7 +60,7 @@ class ExampleAgent:
         self.uses_wallet = False
         # Set this variable to True if the agent needs to use a wallet.
 
-        self.event_description = "{ }"
+        self.event_description = { }
 
         self.default_schedule = "every_1h"
         # specifies a default value of how often should the 'check' method be called.

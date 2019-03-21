@@ -5,7 +5,8 @@ class Email_Send:
     description = '''Sends an email with the specified 'title', 'body' and 'footer'.
     Provide the secret variables to connect to your email provider.
     '''
-    event_description = "{ 'state': 'success' }"
+
+    event_description = { 'state': 'success' }
 
     default_options = {
         'title':'',
