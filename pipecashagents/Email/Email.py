@@ -5,7 +5,6 @@ class Email_Send:
     description = '''Sends an email with the specified 'title', 'body' and 'footer'.
     Provide the secret variables to connect to your email provider.
     '''
-
     event_description = "{ 'state': 'success' }"
 
     default_options = {
@@ -14,17 +13,16 @@ class Email_Send:
         'footer':'',
     }
 
-    def start(self, log, create_event):
+    def start(self, log):
         self.log = log
-        self.create_event = create_event
 
     def __init__(self):
         self.options = { }
         self.uses_secret_variables = []
         self.secrets = {}
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         raise NotImplementedError()
 
-    def check(self):
+    def check(self, create_event):
         raise NotImplementedError()

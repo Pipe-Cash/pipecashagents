@@ -26,16 +26,15 @@ class Binance_Buy:
         'pair': 'BTCUSD'
     }
 
-    def start(self, log, create_event):
+    def start(self, log):
         self.log = log
-        self.create_event = create_event
 
     def __init__(self):
         self.options = { }
         self.uses_secret_variables = []
         self.secrets = {}
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         raise NotImplementedError()
 
 
@@ -55,19 +54,18 @@ class Binance_GetBalance:
         'ticker': 'BCHSV'
     }
 
-    def start(self, log, create_event):
+    def start(self, log):
         self.log = log
-        self.create_event = create_event
 
     def __init__(self):
         self.options = { }
         self.uses_secret_variables = []
         self.secrets = {}
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         raise NotImplementedError()
 
-    def check(self, event):
+    def check(self, event, create_event):
         raise NotImplementedError()
 
 
@@ -90,15 +88,14 @@ class Binance_Withdraw:
         'amount': 7
     }
 
-    def start(self, log, create_event):
+    def start(self, log):
         self.log = log
-        self.create_event = create_event
 
     def __init__(self):
         self.options = { }
         self.uses_secret_variables = []
         self.secrets = {}
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         raise NotImplementedError()
 

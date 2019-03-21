@@ -1,12 +1,12 @@
 class ExampleMinimalAgent:
 
-    def start(self, log, create_event):
+    def start(self, log):
         '''Help:
         log debug => log.debug("some string")
         log info => log.info("some string")
         log warning => log.warn("some string")
         log error => log.error("some string")
-        create event => create_event({ "someKey" : "someValue" })'''
+        '''
         pass
 
     def __init__(self):
@@ -28,13 +28,13 @@ class ExampleMinimalAgent:
 
 class ExampleAgent:
 
-    def start(self, log, create_event):
+    def start(self, log):
         '''Help:
         log debug => log.debug("some string")
         log info => log.info("some string")
         log warning => log.warn("some string")
         log error => log.error("some string")
-        create event => create_event({ "someKey" : "someValue" })'''
+        '''
         pass
 
     def __init__(self):
@@ -98,7 +98,7 @@ class ExampleAgent:
         Should raise an exception if wallet dependencies are missing'''
         pass
 
-    def check(self):
+    def check(self, create_event):
         '''A method to call at a scheduled intervals,
         or when a controller agent triggers an event.
 
@@ -108,10 +108,12 @@ class ExampleAgent:
         - Nothing happens (if condition is negative)
         - An event is created
         - The internal state of the agent gets updated
+
+        create event => create_event({ "someKey" : "someValue" })
         '''
         pass
 
-    def receive(self, event):
+    def receive(self, event, create_event):
         '''A method to call when an event from a triggering actor is created.
         The event object is passed to this method.
 
@@ -121,5 +123,7 @@ class ExampleAgent:
         - An action is done
         - An event is created
         - The internal state of the agent gets updated
+
+        create event => create_event({ "someKey" : "someValue" })
         '''
         pass
