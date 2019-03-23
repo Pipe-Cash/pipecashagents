@@ -26,10 +26,9 @@ class WalletAgent_OnBalanceChange:
         if self.__oldBalance != balance:
             create_event({
                 "balance": balance,
-                "balanceDiff": self.__oldBalance - balance
+                "balanceDiff": balance - self.__oldBalance
             })
-
-
+            self.__oldBalance = balance
 
 class WalletAgent_GetReceiveAddress:
 
@@ -47,7 +46,6 @@ class WalletAgent_GetReceiveAddress:
         self.log = log
 
     def check(self, create_event):
-        create_event({
-            "address": self.wallet.getReceiveAddress()
-        })
+        ev = { "address": self.wallet.getReceiveAddress() }
+        create_event(ev)
 
