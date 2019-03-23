@@ -3,7 +3,7 @@
 import unittest
 import logging
 
-import walletMock
+from .walletMock import MockWallet
 
 from pipecash import agentWrapper, walletWrapper
 
@@ -12,7 +12,7 @@ class TestWalletAgents(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures, if any."""
-        self.w = walletMock.MockWallet()
+        self.w = MockWallet()
         config = { "name": "walletName" }
         self.wallet = walletWrapper.WalletWrapper(self.w, config, {})
         self.getConfig = lambda: config
