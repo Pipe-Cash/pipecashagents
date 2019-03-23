@@ -3,9 +3,17 @@
 import unittest
 import logging
 
-from .walletMock import MockWallet
-
 from pipecash import agentWrapper, walletWrapper
+
+try: # debug
+    from walletMock import MockWallet
+    from logMock import LogMock
+    print("> Import")
+except Exception as e: # tox
+    from .walletMock import MockWallet
+    from .logMock import LogMock
+    print("> Import Failed : " + str(e))
+    print("> Relative Import")
 
 class TestWalletAgents(unittest.TestCase):
     """Tests for `pipecashagents` package."""
@@ -13,9 +21,11 @@ class TestWalletAgents(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures, if any."""
         self.w = MockWallet()
-        config = { "name": "walletName" }
-        self.wallet = walletWrapper.WalletWrapper(self.w, config, {})
-        self.getConfig = lambda: config
+        self.config = { "name": "walletName" }
+        self.wallet = walletWrapper.WalletWrapper(self.w, self.config, {})
+
+        self.logger = agentWrapper.logWrapper.agentLoggerInstance
+        self.logMock = LogMock(self.logger)
 
 
     def tearDown(self):
@@ -29,7 +39,7 @@ class TestWalletAgents(unittest.TestCase):
             events.append(eventDict)
         
         a = WalletAgent_OnBalanceChange()
-        agent = agentWrapper.AgentWrapper(a, self.getConfig(), {})
+        agent = agentWrapper.AgentWrapper(a, self.config, {})
         agent.setWallet(self.wallet)
         agent._AgentWrapper__createEvent = create_event
         agent.start()
@@ -69,7 +79,7 @@ class TestWalletAgents(unittest.TestCase):
             events.append(eventDict)
         
         a = WalletAgent_GetReceiveAddress()
-        agent = agentWrapper.AgentWrapper(a, self.getConfig(), {})
+        agent = agentWrapper.AgentWrapper(a, self.config, {})
         agent.setWallet(self.wallet)
         agent._AgentWrapper__createEvent = create_event
         agent.start()
@@ -79,3 +89,43 @@ class TestWalletAgents(unittest.TestCase):
             self.assertEqual(len(events), i)
             ev = events[-1]
             self.assertDictEqual(ev, { "address": self.w.pubKey })
+
+    def test_WalletAgent_Send(self):
+        from pipecashagents import WalletAgent_Send
+
+        events = []
+        def create_event(eventDict):
+            events.append(eventDict)
+        
+        a = WalletAgent_Send()
+
+        config = {
+            "name": "agentName",
+            "options": {
+                "amount": 1,
+                "recipient": "$bitcoinsofia"
+            }
+        }
+
+        agent = agentWrapper.AgentWrapper(a, config, {})
+        agent.setWallet(self.wallet)
+        agent._AgentWrapper__createEvent = create_event
+        agent.start()
+
+        self.w.addTransaction(10)
+
+        with self.logMock:
+            for i in range(1,3):
+                agent._AgentWrapper__runCheck()
+                self.assertEqual(len(events), i)
+                self.assertDictEqual(events[i-1], { "status": "success" })
+                self.assertEqual(self.w.checkBalance(), 10-i)
+            for i in range(3,5):
+                agent._AgentWrapper__receiveEvent(
+                    "area", "name", "state", "sender", {})
+                self.assertEqual(len(events), i)
+                self.assertDictEqual(events[i-1], { "status": "success" })
+                self.assertEqual(self.w.checkBalance(), 10-i)
+        
+        
+
