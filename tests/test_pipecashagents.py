@@ -18,3 +18,5 @@ class TestPipecashAgents(unittest.TestCase):
         from pipecashagents import Email_Send
         from pipecashagents import WalletAgent_GetReceiveAddress
         from pipecashagents import WalletAgent_OnBalanceChange
+        from pipecashagents import AttributeDifference
+        from pipecashagents import NumberDifference

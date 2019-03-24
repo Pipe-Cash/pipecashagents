@@ -8,5 +8,6 @@ __version__ = '0.1.1'
 
 from pipecashagents.Email.Email import *
 from pipecashagents.WalletAgents.WalletAgents import *
+from pipecashagents.EventGates.DifferenceDetection import *
 
 
