@@ -1,6 +1,6 @@
 #TODO: implement agents
 
-class WalletAgent_OnBalanceChange:
+class OnWalletBalanceChange:
 
     description = '''Monitors the associated wallet for any change in the available funds.'''
 
@@ -30,7 +30,7 @@ class WalletAgent_OnBalanceChange:
             })
             self.__oldBalance = balance
 
-class WalletAgent_GetReceiveAddress:
+class GetWalletReceiveAddress:
 
     description = '''Asks the associated wallet for a receive address.'''
 
@@ -49,7 +49,7 @@ class WalletAgent_GetReceiveAddress:
         ev = { "address": self.wallet.getReceiveAddress() }
         create_event(ev)
 
-class WalletAgent_Send:
+class WalletSend:
 
     description = '''Sends 'amount' money from the associated wallet to specified 'recipient'.'''
 

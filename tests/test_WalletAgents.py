@@ -32,13 +32,13 @@ class TestWalletAgents(unittest.TestCase):
         """Tear down test fixtures, if any."""
 
     def test_WalletAgent_OnBalanceChange(self):
-        from pipecashagents import WalletAgent_OnBalanceChange
+        from pipecashagents import OnWalletBalanceChange
 
         events = []
         def create_event(eventDict):
             events.append(eventDict)
         
-        a = WalletAgent_OnBalanceChange()
+        a = OnWalletBalanceChange()
         agent = agentWrapper.AgentWrapper(a, self.config, {})
         agent.setWallet(self.wallet)
         agent._AgentWrapper__createEvent = create_event
@@ -72,13 +72,13 @@ class TestWalletAgents(unittest.TestCase):
         self.assertDictEqual(ev2, {"balance":9, "balanceDiff":-1})
 
     def test_WalletAgent_GetReceiveAddress(self):
-        from pipecashagents import WalletAgent_GetReceiveAddress
+        from pipecashagents import GetWalletReceiveAddress
 
         events = []
         def create_event(eventDict):
             events.append(eventDict)
         
-        a = WalletAgent_GetReceiveAddress()
+        a = GetWalletReceiveAddress()
         agent = agentWrapper.AgentWrapper(a, self.config, {})
         agent.setWallet(self.wallet)
         agent._AgentWrapper__createEvent = create_event
@@ -91,13 +91,13 @@ class TestWalletAgents(unittest.TestCase):
             self.assertDictEqual(ev, { "address": self.w.pubKey })
 
     def test_WalletAgent_Send(self):
-        from pipecashagents import WalletAgent_Send
+        from pipecashagents import WalletSend
 
         events = []
         def create_event(eventDict):
             events.append(eventDict)
         
-        a = WalletAgent_Send()
+        a = WalletSend()
 
         config = {
             "name": "agentName",
