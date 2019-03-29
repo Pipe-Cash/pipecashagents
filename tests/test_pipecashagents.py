@@ -15,7 +15,7 @@ class TestPipecashAgents(unittest.TestCase):
         """Tear down test fixtures, if any."""
 
     def test_canImportWallets(self):
-        from pipecashagents import Email_Send
+        from pipecashagents import EmailSend
         from pipecashagents import WalletAgent_GetReceiveAddress
         from pipecashagents import WalletAgent_OnBalanceChange
         from pipecashagents import AttributeDifference
