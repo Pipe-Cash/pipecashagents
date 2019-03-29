@@ -1,4 +1,10 @@
-#TODO: implement agents
+import datetime
+import imaplib
+import email
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+import ssl
 
 class EmailSend:
 
@@ -53,12 +59,6 @@ class EmailSend:
         assert hasattr(self.options, "body")
         pass
 
-    def check_dependencies_missing(self):
-        from email.mime.multipart import MIMEMultipart
-        from email.mime.text import MIMEText
-        import smtplib
-        import ssl
-
     def receive(self, event, create_event):
         try:
             self.send_email(event, create_event)
@@ -67,11 +67,6 @@ class EmailSend:
             create_event({ 'state': 'error', 'error': str(e) })
 
     def send_email(self, event, create_event):
-        from email.mime.multipart import MIMEMultipart
-        from email.mime.text import MIMEText
-        import smtplib
-        import ssl
-        
         to_emails = self.options["to_emails"].split(",") # must be a list
         subject = str(self.options["subject"])
         body = str(self.options["body"])
@@ -104,11 +99,171 @@ class EmailSend:
         else:
             server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
         
-        if SMTP_USE_TLS: 
-            server.starttls()
+        try:
+            if SMTP_USE_TLS: 
+                server.starttls()
+            if SMTP_LOGIN:
+                server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.sendmail(from_addr=from_email, to_addrs=to_emails, msg=message.as_string())
+        finally:
+            server.quit()
 
-        if SMTP_LOGIN:
-            server.login(SMTP_USERNAME, SMTP_PASSWORD)
 
-        server.sendmail(from_addr=from_email, to_addrs=to_emails, msg=message.as_string())
-        server.quit()
+
+class OnNewEmail:
+
+    description = '''Checks for new emails in your inbox.
+    Creates a new event for each email received after the last time it checked.
+    
+    Options:
+        "max_emails": Nimber - only check the last N emails. (leave 0 to check all new emails)
+        "mail_folder": String - the folder being checked
+        "search_filter": String - fiter for the mails to consider or ignore.
+                        Default is "ALL". Example "FROM foo@gmail.com"
+
+    Multiple secret values are required to read your email.
+    They describe the connection to the IMAP server:
+
+        "IMAP_SERVER": address of the server (for example: imap.gmail.com)
+        "IMAP_PORT": port or the smtp server (usually 993)
+        "IMAP_LOGIN": Boolean - true login is required
+        "IMAP_USE_SSL": Boolean - true if the connection should use SSL
+        "IMAP_USERNAME": your username (your email)
+        "IMAP_PASSWORD": your password
+
+    In case of failure, the created event will look like this:
+    { 'state': 'error', 'error': 'Error Message' }
+
+    In case of success, a separate event will be created for each new email.
+    {
+        'Subject': 'subject',
+        'From': 'Foo Bar <foobar@gmail.com>', 
+        'Date': 'Sat, 30 Mar 2019 00:15:58 +0200', 
+        'Text': 'Text Text Text Text', 
+        'To': 'Bar Foo <barfoo@gmail.com>'
+    }
+    '''
+
+    event_description = {
+        'Subject': 'subject',
+        'From': 'Foo Bar <foobar@gmail.com>', 
+        'Date': 'Sat, 30 Mar 2019 00:15:58 +0200', 
+        'Text': 'Text Text Text Text', 
+        'To': 'Bar Foo <barfoo@gmail.com>'
+    }
+
+    default_options = {
+        "max_emails": 0,
+        "mail_folder": "inbox",
+        "search_filter": "ALL",
+    }
+    uses_secret_variables = [
+        "IMAP_SERVER",
+        "IMAP_PORT",
+        "IMAP_LOGIN",
+        "IMAP_USE_SSL",
+        "IMAP_USERNAME",
+        "IMAP_PASSWORD",
+    ]
+
+    def start(self, log):
+        self.log = log
+
+    def __init__(self):
+        self.options = {}
+        self.secrets = {}
+
+        self.first_check = True
+
+    def validate_options(self):
+        assert hasattr(self.options, "max_emails")
+        assert hasattr(self.options, "mail_folder")
+        pass
+
+    def check(self, create_event):
+        try:
+            self.read_emails(create_event)
+        except Exception as e:
+            create_event({ 'state': 'error', 'error': str(e) })
+            raise(e)
+
+    def selectFolder(self, mail, mail_folder):
+        try:
+            mail.select(mail_folder)
+        except Exception as e1:
+            try:
+                # try to get names of all folders
+                listOfFolders = mail.list()
+                raise AttributeError("Error while selecting '%s': %s.\nDetails:\n%s" % (
+                    mail_folder, str(e1), str(listOfFolders)))
+            except Exception as e2:
+                raise e1 # failed to get extra data - just rethrow the original error
+
+    def read_emails(self, create_event):
+        
+        max_emails = abs(int(self.options["max_emails"]))
+        mail_folder = str(self.options["mail_folder"])
+        search_filter = str(self.options["search_filter"])
+
+        IMAP_SERVER = self.secrets["IMAP_SERVER"]
+        IMAP_PORT = self.secrets["IMAP_PORT"]
+        IMAP_LOGIN = self.secrets["IMAP_LOGIN"]
+        IMAP_USE_SSL = self.secrets["IMAP_USE_SSL"]
+        IMAP_USERNAME = self.secrets["IMAP_USERNAME"]
+        IMAP_PASSWORD = self.secrets["IMAP_PASSWORD"]
+        
+        
+        if IMAP_USE_SSL:
+            mail = imaplib.IMAP4_SSL(IMAP_SERVER, IMAP_PORT)
+        else:
+            mail = imaplib.IMAP4(IMAP_SERVER, IMAP_PORT)
+
+        if IMAP_LOGIN:
+            mail.login(user=IMAP_USERNAME, password=IMAP_PASSWORD)
+
+        self.selectFolder(mail, mail_folder)
+        
+        code, id_list = mail.search(None, search_filter)
+        id_list = list(map(lambda i: i.decode("utf-8"), id_list[0].split()))
+
+        if self.first_check:
+            self.latest_email_id = id_list[-1]
+            self.first_check = False
+            return
+
+        id_list = id_list[-max_emails:]
+
+        new_list = []
+        for i in reversed(id_list):
+            if i != self.latest_email_id:
+                new_list.append(i)
+            else:
+                self.latest_email_id = id_list[-1]
+                break
+
+        if not any(new_list):
+            return
+        
+        for em in self.fetchEmail(mail, new_list):
+            create_event(em)
+        
+    def fetchEmail(self, mail, id_list):
+        typ, data = mail.fetch(','.join(id_list), '(RFC822)')
+        for response_part in data:
+            if isinstance(response_part, tuple):
+                msg = email.message_from_string(response_part[1].decode("utf-8"))
+
+                payload = ""            
+                for part in msg.walk():
+                    pType = part.get_content_type()
+                    if pType == 'text/plain':
+                        payload = part.get_payload()
+                        break
+
+                yield {
+                    'Subject': msg['Subject'],
+                    'From': msg['From'],
+                    'Date': msg['Date'],
+                    'Text': payload,
+                    'To': msg['To'],
+                }
