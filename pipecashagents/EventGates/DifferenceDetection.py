@@ -19,7 +19,6 @@ class AttributeDifference:
         self.log = log
         self.defaultObj = object()
         self.oldAttribute = self.defaultObj
-        pass
 
     def __init__(self):
 
@@ -72,7 +71,6 @@ class NumberDifference:
         self.log = log
         self.defaultObj = object()
         self.oldNum = self.defaultObj
-        pass
 
     def __init__(self):
 
@@ -139,3 +137,44 @@ class NumberDifference:
                 "diff": round(diff, precision),
                 "percentDiff": round(percentDiff, precision)
             })
+
+class DeDuplicationDetector:
+    description = '''
+    The De-duplication Agent receives a stream of events and remits the event if it is not a duplicate.
+        `property` the value that should be used to determine the uniqueness of the event (empty to use the whole payload)
+        `lookback` amount of past Events to compare the value to (0 for unlimited)
+    '''
+
+    event_description = { }
+
+    default_options = {
+        'property': '{{value}}',
+        'lookback': 10
+    }
+
+    def start(self, log):
+        self.log = log
+
+    def __init__(self):
+        self.options = {}
+        self._memory = []
+        
+    def validate_options(self):
+        assert "lookback" in self.options
+
+    def receive(self, event, create_event):
+        import json
+
+        val = event
+        if "property" in self.options and str(self.options["property"]) != "":
+            val = event[str(self.options["property"])]
+
+        obj_hash = hash(json.dumps(val))
+        if any(self._memory):
+            if obj_hash not in self._memory:
+                create_event(event)
+            
+        lookback = int(self.options["lookback"])
+        self._memory.append(obj_hash)
+        if lookback > 0:
+            self._memory = self._memory[-lookback:]

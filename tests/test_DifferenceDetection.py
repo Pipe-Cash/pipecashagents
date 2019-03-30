@@ -109,7 +109,6 @@ class TestDifferenceDetection(unittest.TestCase):
                 "area", "name", "state", "sender", { "name":i })
             self.assertEqual(len(events), 2)
 
-
     def test_NumberDifference_precission(self):
         from pipecashagents import NumberDifference
 
@@ -142,7 +141,6 @@ class TestDifferenceDetection(unittest.TestCase):
         agent._AgentWrapper__receiveEvent("area", "name", "state", "sender", { "name":1.009 })
         self.assertEqual(len(events), 1)
 
-
     def test_NumberDifference_treshold(self):
         from pipecashagents import NumberDifference
 
@@ -174,7 +172,6 @@ class TestDifferenceDetection(unittest.TestCase):
 
         agent._AgentWrapper__receiveEvent("area", "name", "state", "sender", { "name":1.003 })
         self.assertEqual(len(events), 1)
-
 
     def test_NumberDifference_treshold_percent(self):
         from pipecashagents import NumberDifference
@@ -210,7 +207,6 @@ class TestDifferenceDetection(unittest.TestCase):
 
         agent._AgentWrapper__receiveEvent("area", "name", "state", "sender", { "name":1.02 })
         self.assertEqual(len(events), 1)
-
 
     def test_NumberDifference_stable_value(self):
         from pipecashagents import NumberDifference
@@ -251,3 +247,73 @@ class TestDifferenceDetection(unittest.TestCase):
         agent._AgentWrapper__receiveEvent("area", "name", "state", "sender", { "name":80 })
         self.assertEqual(len(events), 2)
         self.assertDictEqual(events[1], {'diff': -20, 'newValue': 80, 'oldValue': 100, 'percentDiff': -0.2})
+
+    def test_DeDuplicationDetector_propertyName(self):
+        from pipecashagents import DeDuplicationDetector
+
+        events = []
+        def create_event(eventDict):
+            events.append(eventDict)
+        
+        a = DeDuplicationDetector()
+        config = {
+            "name": "walletName",
+            "options": { 
+                'property': 'value',
+                'lookback': 10
+            }
+        }
+        agent = agentWrapper.AgentWrapper(a, config, {})
+        agent._AgentWrapper__createEvent = create_event
+        agent.start()
+
+        for i in range(20):
+            agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "value": 111 })
+            self.assertEqual(len(events), 0)
+        
+        agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "value": 42 })
+        self.assertEqual(len(events), 1)
+        self.assertDictEqual(events[0], { "value": 42 })
+
+        for i in range(9):
+            agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "value": 42 })
+            self.assertEqual(len(events), 1)
+        
+        agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "value": 111 })
+        self.assertEqual(len(events), 2)
+        self.assertDictEqual(events[1], { "value": 111 })
+
+    def test_DeDuplicationDetector_wholeEvent(self):
+        from pipecashagents import DeDuplicationDetector
+
+        events = []
+        def create_event(eventDict):
+            events.append(eventDict)
+        
+        a = DeDuplicationDetector()
+        config = {
+            "name": "walletName",
+            "options": { 
+                'property': '',
+                'lookback': 10
+            }
+        }
+        agent = agentWrapper.AgentWrapper(a, config, {})
+        agent._AgentWrapper__createEvent = create_event
+        agent.start()
+
+        for i in range(20):
+            agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "foo": 111 })
+            self.assertEqual(len(events), 0)
+        
+        agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "bar": 42 })
+        self.assertEqual(len(events), 1)
+        self.assertDictEqual(events[0], { "bar": 42 })
+
+        for i in range(4):
+            agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "bar": 42 })
+            self.assertEqual(len(events), 1)
+        
+        agent._AgentWrapper__receiveEvent("a", "n", "s", "s", { "foo": "bar" })
+        self.assertEqual(len(events), 2)
+        self.assertDictEqual(events[1], {"foo":"bar"})

@@ -24,3 +24,4 @@ class TestPipecashAgents(unittest.TestCase):
 
         from pipecashagents import AttributeDifference
         from pipecashagents import NumberDifference
+        from pipecashagents import DeDuplicationDetector
