@@ -21,6 +21,11 @@ class DelayedEventQueue:
         `max_emitted_events` is used to limit the number of the maximum events which should be created.
             If you omit this DelayAgent will create events for every event stored in the memory.
             Set to '1' if you want events to be emmited one by one.
+
+        'group' Boolean. Set to 'true' if you want the events to be grouped,
+            or 'false' if you want the events to be emmited separetely.
+            If 'group' is true, the final event will look like: { "events": [ {Event1}, {Event2} ] }
+            If 'group' is not specified, it will default to 'false'
     '''
 
     event_description = { }
@@ -36,7 +41,7 @@ class DelayedEventQueue:
         self.log = log
 
     def __init__(self):
-        self.options = {}
+        self.options = {} 
         self.events = []
         
     def validate_options(self):
@@ -77,6 +82,13 @@ class DelayedEventQueue:
             eventsToEmit = reversed(self.events[-max_emitted_events:])
             self.events = self.events[:-max_emitted_events]
 
-        for e in eventsToEmit:
-            create_event(e)
+        group = False
+        if "group" in self.options:
+            group = bool(self.options["group"])
+
+        if not group:
+            for e in eventsToEmit:
+                create_event(e)
+        else:
+            create_event({ "events": list(eventsToEmit) })
 
