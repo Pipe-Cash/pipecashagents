@@ -1,4 +1,3 @@
-import feedparser
 import json
 
 
