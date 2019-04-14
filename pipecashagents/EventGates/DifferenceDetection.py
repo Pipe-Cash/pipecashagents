@@ -26,7 +26,7 @@ class AttributeDifference:
         self.default_options = {"path": "attribute name"}
         
     def validate_options(self):
-        assert "path" in self.options
+        assert "path" in self.options, "'path' not present in options"
 
     def receive(self, event, create_event):
         index = self.options["path"]
@@ -84,7 +84,7 @@ class NumberDifference:
         }
         
     def validate_options(self):
-        assert "path" in self.options
+        assert "path" in self.options, "'path' not present in options"
 
     def receive(self, event, create_event):
         index = self.options["path"]
@@ -95,8 +95,8 @@ class NumberDifference:
 
         if "decimal_precision" in self.options:
             precision = self.options["decimal_precision"]
-            assert type(precision) is int
-            assert precision >= 0
+            assert type(precision) is int, "'precision' is not an integer"
+            assert precision >= 0, "'precision' must be 0 or bigger"
             newNum = round(newNum, precision)
         else:
             precision = 4
@@ -104,7 +104,7 @@ class NumberDifference:
         if self.defaultObj == self.oldNum:
             if "stable_value" in self.options:
                 stable_value = self.options["stable_value"]
-                assert type(stable_value) is float or type(stable_value) is int
+                assert type(stable_value) is float or type(stable_value) is int, "'stable_value' must be int or float"
                 self.oldNum = stable_value
             else:
                 self.oldNum = newNum
@@ -119,15 +119,15 @@ class NumberDifference:
 
             if "treshold" in self.options:
                 treshold = self.options["treshold"]
-                assert type(treshold) is float or type(treshold) is int
-                assert treshold >= 0
+                assert type(treshold) is float or type(treshold) is int, "'treshold' must be int or float"
+                assert treshold >= 0, "'treshold' must be 0 or bigger"
                 if abs(diff) < treshold:
                     return
 
             if "treshold_percent" in self.options:
                 treshold_percent = self.options["treshold_percent"]
-                assert type(treshold_percent) is float or type(treshold_percent) is int
-                assert treshold_percent >= 0
+                assert type(treshold_percent) is float or type(treshold_percent) is int, "'treshold_percent' must be int or float"
+                assert treshold_percent >= 0, "'treshold_percent' must be 0 or bigger"
                 if abs(percentDiff) < treshold_percent/100:
                     return
         
@@ -160,7 +160,7 @@ class DeDuplicationDetector:
         self._memory = []
         
     def validate_options(self):
-        assert "lookback" in self.options
+        assert "lookback" in self.options, "'lookback' not present in options"
 
     def receive(self, event, create_event):
         import json

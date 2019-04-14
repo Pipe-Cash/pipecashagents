@@ -63,8 +63,8 @@ class RssChecker:
         import feedparser
 
     def validate_options(self):
-        assert hasattr(self.options, "url")
-        assert hasattr(self.options, "max_items")
+        assert "url" in self.options, "'url' not present in options"
+        assert "max_items" in self.options, "'max_items' not present in options"
 
     def check(self, create_event):
         try:
@@ -78,7 +78,7 @@ class RssChecker:
 
         url = str(self.options["url"])
         max_items = int(self.options["max_items"])
-        assert max_items >= 0
+        assert max_items >= 0, "'max_items' needs to be 0 or bigger"
 
         feed = feedparser.parse(url)
 

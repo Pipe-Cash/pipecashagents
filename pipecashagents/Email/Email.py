@@ -54,10 +54,9 @@ class EmailSend:
         self.secrets = {}
 
     def validate_options(self):
-        assert hasattr(self.options, "to_emails")
-        assert hasattr(self.options, "subject")
-        assert hasattr(self.options, "body")
-        pass
+        assert "to_emails" in self.options, "'to_emails' not present in options"
+        assert "subject" in self.options, "'subject' not present in options"
+        assert "body" in self.options, "'body' not present in options"
 
     def receive(self, event, create_event):
         try:
@@ -176,9 +175,8 @@ class OnNewEmail:
         self.first_check = True
 
     def validate_options(self):
-        assert hasattr(self.options, "max_emails")
-        assert hasattr(self.options, "mail_folder")
-        pass
+        assert "max_emails" in self.options, "'max_emails' not present in options"
+        assert "mail_folder" in self.options, "'mail_folder' not present in options"
 
     def check(self, create_event):
         try:

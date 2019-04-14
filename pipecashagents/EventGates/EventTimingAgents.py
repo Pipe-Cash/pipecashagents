@@ -45,19 +45,21 @@ class DelayedEventQueue:
         self.events = []
         
     def validate_options(self):
-        assert "max_emitted_events" in self.options
-        assert int(self.options["max_emitted_events"]) > 0
+        assert "max_emitted_events" in self.options, "'max_emitted_events' not present in options"
+        assert int(self.options["max_emitted_events"]) > 0, "'max_emitted_events' must be bigger than 0"
 
-        assert "max_events" in self.options
-        assert int(self.options["max_events"]) > 0
+        assert "max_events" in self.options, "'max_events' not present in options"
+        assert int(self.options["max_events"]) > 0, "'max_events' must be bigger than 0"
 
-        assert "keep" in self.options
-        assert type(self.options["keep"]) == str
-        assert self.options["keep"] == "oldest" or self.options["keep"] == "newest"
+        assert "keep" in self.options, "'keep' not present in options"
+        keep = self.options["keep"]
+        assert type(keep) == str, "'keep' must be a string"
+        assert keep == "oldest" or keep == "newest", "'keep' must be 'oldest' or 'newest'"
 
-        assert "emit_from" in self.options
-        assert type(self.options["emit_from"]) == str
-        assert self.options["emit_from"] == "oldest" or self.options["emit_from"] == "newest"
+        assert "emit_from" in self.options, "'emit_from' not present in options"
+        emit_from = self.options["emit_from"]
+        assert type(emit_from) == str, "'emit_from' must be a string"
+        assert emit_from == "oldest" or emit_from == "newest", "'emit_from' must be 'oldest' or 'newest'"
 
     def receive(self, event, create_event):
         max_events = int(self.options["max_events"])
