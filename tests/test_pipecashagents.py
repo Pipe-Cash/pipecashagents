@@ -28,3 +28,17 @@ class TestPipecashAgents(unittest.TestCase):
         from pipecashagents import DelayedEventQueue
 
         from pipecashagents import RssChecker
+
+        from pipecashagents import Twitter_StreamListener
+        from pipecashagents import Twitter_GetHomeTimeLine
+        from pipecashagents import Twitter_GetUserTimeLine
+        from pipecashagents import Twitter_GetRetweetsOfMe
+        from pipecashagents import Twitter_GetFollowing
+        from pipecashagents import Twitter_GetFollowers
+        from pipecashagents import Twitter_GetBlockedUsers
+        from pipecashagents import Twitter_WriteTweet
+        from pipecashagents import Twitter_ReTweet
+        from pipecashagents import Twitter_Follow
+        from pipecashagents import Twitter_UnFollow
+        from pipecashagents import Twitter_Block
+        from pipecashagents import Twitter_UnBlock

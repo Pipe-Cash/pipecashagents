@@ -11,3 +11,4 @@ from pipecashagents.WalletAgents.WalletAgents import *
 from pipecashagents.EventGates.DifferenceDetection import *
 from pipecashagents.EventGates.EventTimingAgents import *
 from pipecashagents.DataFormats.RSS import *
+from pipecashagents.Twitter.twitterAgents import *
