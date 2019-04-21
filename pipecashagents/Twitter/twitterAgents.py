@@ -1,6 +1,5 @@
 import datetime
 
-import tweepy
 import json
 
 
@@ -16,14 +15,22 @@ class TwitterAgentBase():
         secrets = {}
         options = {}
 
+    def start(self, log):
+        self.log = log
+        import tweepy
+        self.tweepy = tweepy
+
+    def check_dependencies_missing(self):
+        import tweepy
+
     def getAUTH(self, secrets):
-        auth = tweepy.OAuthHandler(secrets["CONSUMER_KEY"], secrets["CONSUMER_SECRET"])
+        auth = self.tweepy.OAuthHandler(secrets["CONSUMER_KEY"], secrets["CONSUMER_SECRET"])
         auth.set_access_token(secrets["ACCES_TOKEN"], secrets["ACCES_TOKEN_SECRET"])
         return auth
 
     def getAPI(self):
         self.auth = self.getAUTH(self.secrets)
-        self.api = tweepy.API(self.auth,
+        self.api = self.tweepy.API(self.auth,
             wait_on_rate_limit=True,
             wait_on_rate_limit_notify=True)
 
@@ -130,7 +137,7 @@ class Twitter_StreamListener(TwitterAgentBase):
     tweetsCollection = []
 
     def stdOutListener(self):
-        class _StdOutListener(tweepy.streaming.StreamListener):
+        class _StdOutListener(self.tweepy.streaming.StreamListener):
             parent = self
             def on_data(self, data):
                 parsed = json.loads(data)
@@ -150,9 +157,10 @@ class Twitter_StreamListener(TwitterAgentBase):
         assert "track" in self.options, "'track' not present in options"
 
     def start(self, log):
+        super(Twitter_StreamListener, self).start(log)
         self.listener = self.stdOutListener()
         self.auth = self.getAUTH(self.secrets)
-        self.stream = tweepy.Stream(self.auth, self.listener)
+        self.stream = self.tweepy.Stream(self.auth, self.listener)
 
         track = self.options['track']
         track = track if type(track) == list else [track]
@@ -177,6 +185,7 @@ class Twitter_GetHomeTimeLine(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetHomeTimeLine, self).start(log)
         self.api = self.getAPI()
         self.since_id = None
 
@@ -206,6 +215,7 @@ class Twitter_GetUserTimeLine(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetUserTimeLine, self).start(log)
         self.api = self.getAPI()
         self.since_id = None
 
@@ -239,6 +249,7 @@ class Twitter_GetRetweetsOfMe(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetRetweetsOfMe, self).start(log)
         self.api = self.getAPI()
         self.since_id = None
 
@@ -267,6 +278,7 @@ class Twitter_GetFollowing(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetFollowing, self).start(log)
         self.api = self.getAPI()
 
     default_options = { "user": "bitcoinsofia", "new_only": False }
@@ -292,6 +304,7 @@ class Twitter_GetFollowers(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetFollowers, self).start(log)
         self.api = self.getAPI()
 
     default_options = { "user": "bitcoinsofia" }
@@ -314,6 +327,7 @@ class Twitter_GetBlockedUsers(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_GetBlockedUsers, self).start(log)
         self.api = self.getAPI()
 
     event_description = {"blocked_users":[TwitterAgentBase.user_example_object]}
@@ -335,6 +349,7 @@ class Twitter_WriteTweet(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_WriteTweet, self).start(log)
         self.api = self.getAPI()
 
     default_options = {
@@ -371,6 +386,7 @@ class Twitter_ReTweet(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_ReTweet, self).start(log)
         self.api = self.getAPI()
 
     default_options = {
@@ -400,6 +416,7 @@ class Twitter_Follow(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_Follow, self).start(log)
         self.api = self.getAPI()
 
     default_options = { 'screen_name': 'bitcoinsofia'}
@@ -427,6 +444,7 @@ class Twitter_UnFollow(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_UnFollow, self).start(log)
         self.api = self.getAPI()
 
     default_options = { 'screen_name': 'Blockstream'}
@@ -455,6 +473,7 @@ class Twitter_Block(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_Block, self).start(log)
         self.api = self.getAPI()
 
     default_options = { 'screen_name': 'Blockstream'}
@@ -482,6 +501,7 @@ class Twitter_UnBlock(TwitterAgentBase):
     '''
 
     def start(self, log):
+        super(Twitter_UnBlock, self).start(log)
         self.api = self.getAPI()
 
     default_options = { 'screen_name': 'bitcoinsofia'}
@@ -499,4 +519,3 @@ class Twitter_UnBlock(TwitterAgentBase):
         result = self.api.destroy_block(screen_name)
         result = self.getImportantUserFields(result)
         create_event({ "unblocked": result })
-
