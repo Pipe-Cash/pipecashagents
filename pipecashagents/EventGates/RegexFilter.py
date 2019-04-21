@@ -14,7 +14,7 @@ class RegexFilter:
         'propertyName' - name of the event property to test
 
         'proprtyValue' - can be used instead of 'propertyName' in case of more complex events.
-                        example: {{tweet.text}}
+                        example: {{tweets[0].text}}
 
         'regex' - a regex string used to check the property
         '''
