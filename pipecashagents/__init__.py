@@ -16,3 +16,5 @@ from pipecashagents.EventGates.Lists import *
 
 from pipecashagents.DataFormats.RSS import *
 from pipecashagents.Twitter.twitterAgents import *
+
+from pipecashagents.HandCash.GetHandCashAddress import *
