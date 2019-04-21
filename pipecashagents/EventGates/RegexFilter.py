@@ -13,7 +13,7 @@ class RegexFilter:
 
         'propertyName' - name of the event property to test
 
-        'proprtyValue' - can be used instead of 'propertyName' in case of more complex events.
+        'propertyValue' - can be used instead of 'propertyName' in case of more complex events.
                         example: {{tweets[0].text}}
 
         'regex' - a regex string used to check the property
@@ -22,7 +22,7 @@ class RegexFilter:
         self.options = {}
 
         self.default_options = {
-            "proprtyValue": "{{text}}",
+            "propertyValue": "{{text}}",
             "regex": "\$[0-9a-zA-Z]+"
         }
 
@@ -33,15 +33,15 @@ class RegexFilter:
 
     def validate_options(self):
         nameInOptions = "propertyName" in self.options
-        valueInOptions = "proprtyValue" in self.options
-        assert nameInOptions or valueInOptions, "either 'propertyName' or 'proprtyValue' must be in options"
+        valueInOptions = "propertyValue" in self.options
+        assert nameInOptions or valueInOptions, "either 'propertyName' or 'propertyValue' must be in options"
         assert "regex" in self.options, "'regex' not in options"
 
     def receive(self, event, create_event):
         o = self.options
         propertyName = o["propertyName"] if "propertyName" in o else None
-        proprtyValue = o["proprtyValue"] if "proprtyValue" in o else None
-        regex_text = str(proprtyValue if proprtyValue is not None else event[propertyName])
+        propertyValue = o["propertyValue"] if "propertyValue" in o else None
+        regex_text = str(propertyValue if propertyValue is not None else event[propertyName])
         regex = str(o["regex"] if "regex" in o else None)
 
         matches = re.findall(regex, regex_text)
