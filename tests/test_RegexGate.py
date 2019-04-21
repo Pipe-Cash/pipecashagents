@@ -55,7 +55,7 @@ class TestRegexFilter(unittest.TestCase):
         config = {
             'name': 'agent',
             'options': {
-                "proprtyValue": "{{texts[0]+texts[0]}}",
+                "propertyValue": "{{texts[0]+texts[0]}}",
                 'regex': "\$[0-9a-zA-Z]+"
             }
         }
