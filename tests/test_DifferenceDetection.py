@@ -1,5 +1,3 @@
-#TODO: implement agents
-
 import unittest
 import logging
 
