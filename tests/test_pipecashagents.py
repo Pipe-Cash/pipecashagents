@@ -26,6 +26,7 @@ class TestPipecashAgents(unittest.TestCase):
         from pipecashagents import NumberDifference
         from pipecashagents import DeDuplicationDetector
         from pipecashagents import DelayedEventQueue
+        from pipecashagents import RegexFilter
 
         from pipecashagents import RssChecker
 
