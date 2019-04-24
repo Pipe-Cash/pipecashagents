@@ -20,3 +20,4 @@ from pipecashagents.Twitter.twitterAgents import *
 from pipecashagents.HandCash.GetHandCashAddress import *
 
 from pipecashagents.OS.WatchDir import *
+from pipecashagents.OS.ReadFile import *
