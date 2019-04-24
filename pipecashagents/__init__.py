@@ -18,3 +18,5 @@ from pipecashagents.DataFormats.RSS import *
 from pipecashagents.Twitter.twitterAgents import *
 
 from pipecashagents.HandCash.GetHandCashAddress import *
+
+from pipecashagents.OS.WatchDir import *
