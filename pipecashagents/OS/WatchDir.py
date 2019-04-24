@@ -1,7 +1,6 @@
 import os
 import fnmatch
 
-
 class WatchDirectory:
 
     def start(self, log):
@@ -65,10 +64,10 @@ class WatchDirectory:
         }
 
     def check(self, create_event):
-        path = self.options['path']
-        track = self.options['track']
-        event = self.options['event']
-        nameFilter = self.options['filter']
+        path = str(self.options['path'])
+        track = str(self.options['track'])
+        event = str(self.options['event'])
+        nameFilter = str(self.options['filter'])
 
         paths = [os.path.join(path, n) for n in os.listdir(path)]
 
