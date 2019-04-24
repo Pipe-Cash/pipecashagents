@@ -34,7 +34,7 @@ class TestPipecashAgents(unittest.TestCase):
         from pipecashagents import GetHandCashAddress
 
         from pipecashagents import WatchDirectory
-        from pipecashagents import ReadFiles
+        from pipecashagents import ReadFile
 
         from pipecashagents import Twitter_StreamListener
         from pipecashagents import Twitter_GetHomeTimeLine
