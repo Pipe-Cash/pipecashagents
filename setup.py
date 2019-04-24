@@ -15,7 +15,7 @@ requirements = [ ]
 
 setup_requirements = [ ]
 
-test_requirements = [ "pipecash" ]
+test_requirements = [ "pipecash", "requests" ]
 
 setup(
     author="Aleksandar Nikolaev Dinkov",
