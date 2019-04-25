@@ -36,6 +36,10 @@ class TestPipecashAgents(unittest.TestCase):
         from pipecashagents import WatchDirectory
         from pipecashagents import ReadFile
 
+        from pipecashagents import OpReturn_B
+        from pipecashagents import OpReturn_Bitcom
+        from pipecashagents import OpReturn_EventAsJson
+
         from pipecashagents import Twitter_StreamListener
         from pipecashagents import Twitter_GetHomeTimeLine
         from pipecashagents import Twitter_GetUserTimeLine
