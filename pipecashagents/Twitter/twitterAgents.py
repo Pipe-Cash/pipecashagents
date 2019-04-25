@@ -3,7 +3,7 @@ import datetime
 import json
 
 
-class __TwitterAgentBase():
+class TwitterAgentBase():
     uses_secret_variables = [
         "CONSUMER_KEY",
         "CONSUMER_SECRET",
@@ -122,7 +122,7 @@ class __TwitterAgentBase():
     }
 
 
-class Twitter_StreamListener(__TwitterAgentBase):
+class Twitter_StreamListener(TwitterAgentBase):
     description = '''
     Actively listens to all tweets on twitter, that match the 'track' filters.
 
@@ -151,7 +151,7 @@ class Twitter_StreamListener(__TwitterAgentBase):
         "track": [ "bitcoin sv", "bitcoinsv", "BSV" ]
     }
 
-    event_description = {"tweets":[__TwitterAgentBase.tweet_example_object]}
+    event_description = {"tweets":[TwitterAgentBase.tweet_example_object]}
 
     def validate_options(self):
         assert "track" in self.options, "'track' not present in options"
@@ -173,7 +173,7 @@ class Twitter_StreamListener(__TwitterAgentBase):
         create_event({"tweets": tweets})
 
 
-class Twitter_GetHomeTimeLine(__TwitterAgentBase):
+class Twitter_GetHomeTimeLine(TwitterAgentBase):
     description = '''
     Returns the 20 most recent statuses, including retweets, 
     posted by the authenticating user and that user’s friends. 
@@ -190,7 +190,7 @@ class Twitter_GetHomeTimeLine(__TwitterAgentBase):
         self.since_id = None
 
     default_options = { "new_only": True }
-    event_description = {"tweets":[__TwitterAgentBase.tweet_example_object]}
+    event_description = {"tweets":[TwitterAgentBase.tweet_example_object]}
 
     def check(self, create_event):
         newOnly = 'new_only' in self.options and self.options['new_only']
@@ -202,7 +202,7 @@ class Twitter_GetHomeTimeLine(__TwitterAgentBase):
             create_event({ "tweets": tweets })
 
 
-class Twitter_GetUserTimeLine(__TwitterAgentBase):
+class Twitter_GetUserTimeLine(TwitterAgentBase):
     description = '''
     Returns the 20 most recent statuses posted
     from a user’s timeline via the screen_name parameter.
@@ -220,7 +220,7 @@ class Twitter_GetUserTimeLine(__TwitterAgentBase):
         self.since_id = None
 
     default_options = { 'new_only': True, 'screen_name': 'bitcoinsofia'}
-    event_description = {"tweets":[__TwitterAgentBase.tweet_example_object]}
+    event_description = {"tweets":[TwitterAgentBase.tweet_example_object]}
 
     def check(self, create_event):
         newOnly = 'new_only' in self.options and self.options['new_only']
@@ -238,7 +238,7 @@ class Twitter_GetUserTimeLine(__TwitterAgentBase):
             create_event({ "tweets": tweets })
 
 
-class Twitter_GetRetweetsOfMe(__TwitterAgentBase):
+class Twitter_GetRetweetsOfMe(TwitterAgentBase):
     description = '''
     Returns the 20 most recent tweets of the authenticated user 
         that have been retweeted by others.
@@ -254,7 +254,7 @@ class Twitter_GetRetweetsOfMe(__TwitterAgentBase):
         self.since_id = None
 
     default_options = { "new_only": True }
-    event_description = {"retweets":[__TwitterAgentBase.tweet_example_object]}
+    event_description = {"retweets":[TwitterAgentBase.tweet_example_object]}
 
     def check(self, create_event):
         newOnly = 'new_only' in self.options and self.options['new_only']
@@ -266,7 +266,7 @@ class Twitter_GetRetweetsOfMe(__TwitterAgentBase):
             create_event({ "retweets": tweets })
 
 
-class Twitter_GetFollowing(__TwitterAgentBase):
+class Twitter_GetFollowing(TwitterAgentBase):
     description = '''
     Returns an array containing the IDs of users 
         being followed by the specified user.
@@ -282,7 +282,7 @@ class Twitter_GetFollowing(__TwitterAgentBase):
         self.api = self.getAPI()
 
     default_options = { "user": "bitcoinsofia", "new_only": False }
-    event_description = {"following":[__TwitterAgentBase.user_example_object]}
+    event_description = {"following":[TwitterAgentBase.user_example_object]}
 
     def check(self, create_event):
         user = self.options['user'] if 'user' in self.options else None
@@ -293,7 +293,7 @@ class Twitter_GetFollowing(__TwitterAgentBase):
             create_event({ "following": results })
 
 
-class Twitter_GetFollowers(__TwitterAgentBase):
+class Twitter_GetFollowers(TwitterAgentBase):
     description = '''
     Returns an user’s followers ordered in which they were added 100 at a time.
     If no user is specified by id/screen name, it defaults to the authenticated user.
@@ -308,7 +308,7 @@ class Twitter_GetFollowers(__TwitterAgentBase):
         self.api = self.getAPI()
 
     default_options = { "user": "bitcoinsofia" }
-    event_description = {"followers":[__TwitterAgentBase.user_example_object]}
+    event_description = {"followers":[TwitterAgentBase.user_example_object]}
 
     def check(self, create_event):
         user = self.options['user'] if 'user' in self.options else None
@@ -319,7 +319,7 @@ class Twitter_GetFollowers(__TwitterAgentBase):
             create_event({ "followers": results })
 
 
-class Twitter_GetBlockedUsers(__TwitterAgentBase):
+class Twitter_GetBlockedUsers(TwitterAgentBase):
     description = '''
     Returns an array of user objects that the authenticating user is blocking.
 
@@ -330,7 +330,7 @@ class Twitter_GetBlockedUsers(__TwitterAgentBase):
         super(Twitter_GetBlockedUsers, self).start(log)
         self.api = self.getAPI()
 
-    event_description = {"blocked_users":[__TwitterAgentBase.user_example_object]}
+    event_description = {"blocked_users":[TwitterAgentBase.user_example_object]}
 
     def check(self, create_event):
         results = self.api.blocks()
@@ -339,7 +339,7 @@ class Twitter_GetBlockedUsers(__TwitterAgentBase):
             create_event({ "blocked_users": results })
 
 
-class Twitter_WriteTweet(__TwitterAgentBase):
+class Twitter_WriteTweet(TwitterAgentBase):
     description = '''
     Update the authenticated user’s status.
     Statuses that are duplicates or too long will be silently ignored.
@@ -357,7 +357,7 @@ class Twitter_WriteTweet(__TwitterAgentBase):
         'reply_to_id': None,
     }
 
-    event_description = {"tweet":__TwitterAgentBase.tweet_example_object}
+    event_description = {"tweet":TwitterAgentBase.tweet_example_object}
 
     def validate_options(self):
         assert "status" in self.options, "'status' not present in options"
@@ -378,7 +378,7 @@ class Twitter_WriteTweet(__TwitterAgentBase):
         create_event({ "tweet": result })
 
 
-class Twitter_ReTweet(__TwitterAgentBase):
+class Twitter_ReTweet(TwitterAgentBase):
     description = '''
     Retweets a tweet. Requires the id of the tweet you are retweeting.
 
@@ -393,7 +393,7 @@ class Twitter_ReTweet(__TwitterAgentBase):
         'id': 1118651303213916161,
     }
 
-    event_description = {"tweet":__TwitterAgentBase.tweet_example_object}
+    event_description = {"tweet":TwitterAgentBase.tweet_example_object}
 
     def validate_options(self):
         assert "id" in self.options, "'id' not present in options"
@@ -408,7 +408,7 @@ class Twitter_ReTweet(__TwitterAgentBase):
         create_event({ "tweet": result })
 
 
-class Twitter_Follow(__TwitterAgentBase):
+class Twitter_Follow(TwitterAgentBase):
     description = '''
     Create a new friendship with the specified user (aka follow).
 
@@ -421,7 +421,7 @@ class Twitter_Follow(__TwitterAgentBase):
 
     default_options = { 'screen_name': 'bitcoinsofia'}
 
-    event_description = {"followed":__TwitterAgentBase.user_example_object}
+    event_description = {"followed":TwitterAgentBase.user_example_object}
 
     def validate_options(self):
         assert "screen_name" in self.options, "'screen_name' not present in options"
@@ -436,7 +436,7 @@ class Twitter_Follow(__TwitterAgentBase):
         create_event({ "followed": result })
 
 
-class Twitter_UnFollow(__TwitterAgentBase):
+class Twitter_UnFollow(TwitterAgentBase):
     description = '''
     Destroy a friendship with the specified user (aka unfollow).
 
@@ -449,7 +449,7 @@ class Twitter_UnFollow(__TwitterAgentBase):
 
     default_options = { 'screen_name': 'Blockstream'}
 
-    event_description = {"unfollowed":__TwitterAgentBase.user_example_object}
+    event_description = {"unfollowed":TwitterAgentBase.user_example_object}
 
     def validate_options(self):
         assert "screen_name" in self.options, "'screen_name' not present in options"
@@ -464,7 +464,7 @@ class Twitter_UnFollow(__TwitterAgentBase):
         create_event({ "unfollowed": result })
 
 
-class Twitter_Block(__TwitterAgentBase):
+class Twitter_Block(TwitterAgentBase):
     description = '''
     Blocks the user specified in the ID parameter as the authenticating user.
     Destroys a friendship (following) to the blocked user if it exists.
@@ -478,7 +478,7 @@ class Twitter_Block(__TwitterAgentBase):
 
     default_options = { 'screen_name': 'Blockstream'}
 
-    event_description = {"blocked":__TwitterAgentBase.user_example_object}
+    event_description = {"blocked":TwitterAgentBase.user_example_object}
 
     def validate_options(self):
         assert "screen_name" in self.options, "'screen_name' not present in options"
@@ -493,7 +493,7 @@ class Twitter_Block(__TwitterAgentBase):
         create_event({ "blocked": result })
 
 
-class Twitter_UnBlock(__TwitterAgentBase):
+class Twitter_UnBlock(TwitterAgentBase):
     description = '''
     Un-blocks the user specified in the ID parameter for the authenticating user.
 
@@ -506,7 +506,7 @@ class Twitter_UnBlock(__TwitterAgentBase):
 
     default_options = { 'screen_name': 'bitcoinsofia'}
 
-    event_description = {"blocked":__TwitterAgentBase.user_example_object}
+    event_description = {"blocked":TwitterAgentBase.user_example_object}
 
     def validate_options(self):
         assert "screen_name" in self.options, "'screen_name' not present in options"
