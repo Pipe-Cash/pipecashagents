@@ -99,6 +99,11 @@ class WriteEventToFile:
             json - will write event as json (or will append it to a json array if mode is 'append')
             yaml - will write the event in the yaml format (or add to a yaml collection if mode is 'append')
             csv - will write the event as csv (or add to csv collection if mode is 'append')
+
+    NOTE:   if using the 'yaml' dataFormat,
+            you will need to install 'PyYaml'
+            
+            $ pip install pyyaml
     '''
 
     default_options = {
