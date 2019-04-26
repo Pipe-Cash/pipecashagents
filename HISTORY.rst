@@ -2,6 +2,20 @@
 History
 =======
 
+0.1.2.3 (2019-04-07)
+------------------
+* New agents:
+    - HTML text scrape
+    - WriteFile & WriteEventToFile agents
+    - 3 OpReturn Agents
+    - Read File agent
+    - WatchDirectory Agent
+    - GetHandCashAddress agent
+    - ForEach (list splitter to events) agent
+    - RegexFilter Agent
+    - 13 different Twitter Agents
+    
+
 0.1.2.2 (2019-04-07)
 ------------------
 * Fixed broken assertions
