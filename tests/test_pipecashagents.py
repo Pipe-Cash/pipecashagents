@@ -35,6 +35,8 @@ class TestPipecashAgents(unittest.TestCase):
 
         from pipecashagents import WatchDirectory
         from pipecashagents import ReadFile
+        from pipecashagents import WriteFile
+        from pipecashagents import WriteEventToFile
 
         from pipecashagents import OpReturn_B
         from pipecashagents import OpReturn_Bitcom
