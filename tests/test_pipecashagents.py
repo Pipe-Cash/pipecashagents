@@ -31,6 +31,8 @@ class TestPipecashAgents(unittest.TestCase):
 
         from pipecashagents import RssChecker
 
+        from pipecashagents import ScrapeHtmlText
+
         from pipecashagents import GetHandCashAddress
 
         from pipecashagents import WatchDirectory
