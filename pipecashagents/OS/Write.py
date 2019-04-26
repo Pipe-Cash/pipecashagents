@@ -121,7 +121,6 @@ class WriteEventToFile:
         self.options = {}
 
     def validate_options(self):
-        assert 'text' in self.options, "'text' not in options"
         assert 'path' in self.options, "'path' not in options"
         assert 'mode' in self.options, "'mode' not in options"
         m = self.options['mode']

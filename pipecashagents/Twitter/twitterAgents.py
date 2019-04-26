@@ -12,8 +12,8 @@ class TwitterAgentBase():
     ]
 
     def __init__(self):
-        secrets = {}
-        options = {}
+        self.secrets = {}
+        self.options = {}
 
     def start(self, log):
         self.log = log
