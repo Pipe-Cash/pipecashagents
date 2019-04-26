@@ -29,7 +29,7 @@ class WriteFile:
         'mode': 'appendLine'
     }
 
-    event_description = { }
+    event_description = { 'outputFile': "/path/to/file.txt" }
 
     def start(self, log):
         pass
@@ -112,7 +112,7 @@ class WriteEventToFile:
         'dataFormat': 'csv'
     }
 
-    event_description = { }
+    event_description = { 'outputFile': "/path/to/file.json" }
 
     def start(self, log):
         pass
