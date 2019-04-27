@@ -67,14 +67,14 @@ class WatchDirectory:
         path = str(self.options['path'])
         track = str(self.options['track'])
         event = str(self.options['event'])
-        nameFilter = str(self.options['filter'])
+        nameFilter = str(self.options['filter']) if 'filter' in self.options else None
 
         paths = [os.path.join(path, n) for n in os.listdir(path)]
 
         if track == 'files':
-            paths = [os.path.isfile(p) for p in paths]
+            paths = [p for p in paths if os.path.isfile(p)]
         elif track == 'folders':
-            paths = [os.path.isdir(p) for p in paths]
+            paths = [p for p in paths if os.path.isdir(p)]
         if nameFilter is not None:
             paths = fnmatch.filter(paths, nameFilter)
 
