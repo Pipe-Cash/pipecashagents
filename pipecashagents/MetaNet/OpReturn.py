@@ -29,20 +29,24 @@ class OpReturnBase:
         else:
             raise Exception('TXID not found in BitSV reply.\n' + json.dumps(reply))
 
-    def readFile(path):
+    def readFile(self, path):
+        if not hasattr(self, "filetype"):
+            import filetype
+            self.filetype = filetype
+
         if not os.path.exists(path):
             raise FileNotFoundError("File is missing: " + path)
+
         with open(path, 'rb') as f:
             fileContent = f.read()
-        mimetype = self.filetype.guess_mime(fileContent)
+        mimetype = self.filetype.guess_mime(path)
         mimetype = mimetype or 'application/binary'
         return [ 
             os.path.basename(path), 
             mimetype,
             'binary',
-            fileContent
+            str(fileContent)[2:-1]
         ]
-
 
 class OpReturn_B(OpReturnBase):
     description = '''
@@ -57,6 +61,9 @@ class OpReturn_B(OpReturnBase):
     - 'filename': (string) Name of the file 
     - 'media_type': (string) The media type of the data (defaults to 'text/plain')
     - 'encoding': (string) The encoding. (Defaults to UTF-8 if missing)
+
+    NOTE: if using the 'path' property, the agent will depend on the 'filetype' package
+                (pip install filetype)
     '''
 
     default_options = {
@@ -73,10 +80,7 @@ class OpReturn_B(OpReturnBase):
     }
 
     def validate_options(self):
-        if 'path' in self.options:
-            assert os.path.exists(
-                self.options['path']), "Path '%s' does not exist" % self.options['path']
-        else:
+        if 'path' not in self.options:
             assert 'data' in self.options, "'data' not in options"
             assert 'filename' in self.options, "'filename' not in options"
 
@@ -163,10 +167,6 @@ class OpReturn_EventAsJson(OpReturnBase):
     event_description = {
         'txid': "<transaction id>"
     }
-
-    def validate_options(self):
-            assert 'data' in self.options, "'data' not in options"
-            assert 'protocol' in self.options, "'protocol' not in options"
 
     def receive(self, event, create_event):
         fileContent = json.dumps(event)

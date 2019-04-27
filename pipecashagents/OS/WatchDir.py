@@ -47,8 +47,6 @@ class WatchDirectory:
         assert 'path' in self.options, "'path' not in options"
         assert 'track' in self.options, "'track' not in options"
         assert 'event' in self.options, "'event' not in options"
-        assert os.path.exists(
-            self.options['path']), "Path '%s' does not exist" % self.options['path']
         assert self.options['track'] in ['files', 'folders', 'all'], 'Unknown track option'
         assert self.options['event'] in ['new', 'change', 'all'], 'Unknown event option'
 
