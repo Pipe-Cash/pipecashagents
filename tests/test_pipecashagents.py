@@ -4,6 +4,10 @@
 """Tests for `pipecashagents` package."""
 
 import unittest
+import inspect
+import pipecash
+import traceback
+
 
 class TestPipecashAgents(unittest.TestCase):
     """Tests for `pipecashagents` package."""
@@ -14,46 +18,97 @@ class TestPipecashAgents(unittest.TestCase):
     def tearDown(self):
         """Tear down test fixtures, if any."""
 
-    def test_canImportWallets(self):
-        from pipecashagents import EmailSend
-        from pipecashagents import OnNewEmail
+    expectedAgents = [
+        "EmailSend",
+        "OnNewEmail",
+        "GetWalletReceiveAddress",
+        "OnWalletBalanceChange",
+        "WalletSend",
+        "AttributeDifference",
+        "NumberDifference",
+        "DeDuplicationDetector",
+        "DelayedEventQueue",
+        "RegexFilter",
+        "ForEach",
+        "RssChecker",
+        "ScrapeHtmlText",
+        "GetHandCashAddress",
+        "WatchDirectory",
+        "ReadFile",
+        "WriteFile",
+        "WriteEventToFile",
+        "OpReturn_B",
+        "OpReturn_Bitcom",
+        "OpReturn_EventAsJson",
+        "Twitter_StreamListener",
+        "Twitter_GetHomeTimeLine",
+        "Twitter_GetUserTimeLine",
+        "Twitter_GetRetweetsOfMe",
+        "Twitter_GetFollowing",
+        "Twitter_GetFollowers",
+        "Twitter_GetBlockedUsers",
+        "Twitter_WriteTweet",
+        "Twitter_ReTweet",
+        "Twitter_Follow",
+        "Twitter_UnFollow",
+        "Twitter_Block",
+        "Twitter_UnBlock",
+    ]
 
-        from pipecashagents import GetWalletReceiveAddress
-        from pipecashagents import OnWalletBalanceChange
-        from pipecashagents import WalletSend
+    def test_allAgents(self):
+        import pipecashagents
 
-        from pipecashagents import AttributeDifference
-        from pipecashagents import NumberDifference
-        from pipecashagents import DeDuplicationDetector
-        from pipecashagents import DelayedEventQueue
-        from pipecashagents import RegexFilter
-        from pipecashagents import ForEach
+        agents = {i: getattr(pipecashagents, i) for i in dir(pipecashagents)}
+        agents = {i: agents[i] for i in agents if inspect.isclass(agents[i])}
+        agents = {i: agents[i]
+                  for i in agents if self.__checkIsAgent(agents[i])}
 
-        from pipecashagents import RssChecker
+        for n in self.expectedAgents:
+            assert n in agents, "expected agent %s not found" % n
 
-        from pipecashagents import ScrapeHtmlText
+        for a in agents:
+            assert a in self.expectedAgents, "agent %s not listed in expectedAgents" % a
 
-        from pipecashagents import GetHandCashAddress
+        for i in agents:
+            self.__verifyAgentDefaultOptions(i, agents[i])
 
-        from pipecashagents import WatchDirectory
-        from pipecashagents import ReadFile
-        from pipecashagents import WriteFile
-        from pipecashagents import WriteEventToFile
+    def __checkIsAgent(self, agent):
+        '''
+        Checks:
+            - has empty constructor
+            - has 'description' attribute
+            - description is String
+        '''
+        try:
+            ag = agent()
+            if not hasattr(ag, "description"):
+                return False
+            if type(ag.description) != str:
+                return False
+            return True
+        except Exception:
+            return False
 
-        from pipecashagents import OpReturn_B
-        from pipecashagents import OpReturn_Bitcom
-        from pipecashagents import OpReturn_EventAsJson
+    def __verifyAgentDefaultOptions(self, agentName, agentClass):
+        try:
+            print("-> checking agent " + agentName)
+            
+            ag = agentClass()
 
-        from pipecashagents import Twitter_StreamListener
-        from pipecashagents import Twitter_GetHomeTimeLine
-        from pipecashagents import Twitter_GetUserTimeLine
-        from pipecashagents import Twitter_GetRetweetsOfMe
-        from pipecashagents import Twitter_GetFollowing
-        from pipecashagents import Twitter_GetFollowers
-        from pipecashagents import Twitter_GetBlockedUsers
-        from pipecashagents import Twitter_WriteTweet
-        from pipecashagents import Twitter_ReTweet
-        from pipecashagents import Twitter_Follow
-        from pipecashagents import Twitter_UnFollow
-        from pipecashagents import Twitter_Block
-        from pipecashagents import Twitter_UnBlock
+            secretNames = ag.uses_secret_variables if hasattr(ag, "uses_secret_variables") else {}
+            secrets = { i:"secret var" for i in secretNames }
+            default_options = ag.default_options if hasattr(ag, "default_options") else {}
+            
+            agWrapper = pipecash.agentWrapper.AgentWrapper(ag,
+                {
+                    "name": agentName + "_instance",
+                    "options": default_options
+                }, pipecash.secretsManager.SecretsManager(secrets) )
+
+        except Exception as ex:
+
+            raise AssertionError("Error when initializing AgentWrapper on %s:\n---\n%s\n---\n%s" % (
+                agentName,
+                str(ex),
+                traceback.format_exc()
+            ))

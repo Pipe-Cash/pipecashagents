@@ -15,7 +15,9 @@ requirements = [ ]
 
 setup_requirements = [ ]
 
-test_requirements = [ "pipecash", "requests" ]
+test_requirements = [ "pipecash", "requests",
+    "bitsv", "filetype", "feedparser", "beautifulsoup4", "tweepy"
+]
 
 setup(
     author="Aleksandar Nikolaev Dinkov",
