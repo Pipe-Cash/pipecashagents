@@ -4,7 +4,7 @@
 
 __author__ = """Aleksandar Nikolaev Dinkov"""
 __email__ = 'alexander.n.dinkov@gmail.com'
-__version__ = '0.1.2.4'
+__version__ = '0.1.2.5'
 
 from pipecashagents.Email.Email import *
 from pipecashagents.WalletAgents.WalletAgents import *
