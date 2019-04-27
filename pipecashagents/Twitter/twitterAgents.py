@@ -46,10 +46,11 @@ class TwitterAgentBase():
         return index
 
     def getImportantTweetFields_Json(self, tweet):
+        text =  tweet['extended_tweet']['full_text'] if tweet['truncated'] == True else tweet['text']
         tweetData = {
             "created_at" : tweet['created_at'],
             "id" : tweet['id'],
-            "text" : tweet['text'],
+            "text" : text,
             "user_name" : tweet['user']['name'],
             "user_screen_name" : tweet['user']['screen_name'],
             "hashtags" : [i['text'] for i in tweet['entities']['hashtags']],
