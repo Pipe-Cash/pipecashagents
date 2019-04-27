@@ -7,8 +7,8 @@ class ReadFile:
     def start(self, log):
         self.log = log
 
-        import filetype
-        self.filetype = filetype
+        import mimetypes
+        self.mimetypes = mimetypes
 
     def __init__(self):
 
@@ -30,7 +30,7 @@ class ReadFile:
 
         self.event_description = {
             'fileContent': b'contents of file',
-            'fileType': None, 
+            'mimetypes': None, 
             'path': '/home/alex/Desktop/test-folder/secrets.json'}
 
     def validate_options(self):
@@ -38,7 +38,7 @@ class ReadFile:
         assert 'format' in self.options, "'track' not in options"
 
     def check_dependencies_missing(self):
-        import filetype
+        import mimetypes
 
     def check(self, create_event):
         path = str(self.options['path'])
@@ -50,7 +50,7 @@ class ReadFile:
         with open(path, 'rb') as f:
             fileContent = f.read()
 
-        mime = self.filetype.guess_mime(fileContent)
+        mime = self.mimetypes.guess_type(path)[0]
         mime = mime or 'application/binary'
 
         if dataFormat == 'base64':

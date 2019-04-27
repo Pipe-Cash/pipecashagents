@@ -30,16 +30,16 @@ class OpReturnBase:
             raise Exception('TXID not found in BitSV reply.\n' + json.dumps(reply))
 
     def readFile(self, path):
-        if not hasattr(self, "filetype"):
-            import filetype
-            self.filetype = filetype
+        if not hasattr(self, "mimetypes"):
+            import mimetypes
+            self.mimetypes = mimetypes
 
         if not os.path.exists(path):
             raise FileNotFoundError("File is missing: " + path)
 
         with open(path, 'rb') as f:
             fileContent = f.read()
-        mimetype = self.filetype.guess_mime(path)
+        mimetype = self.mimetypes.guess_type(path)[0]
         mimetype = mimetype or 'application/binary'
         return [ 
             os.path.basename(path), 
@@ -61,9 +61,6 @@ class OpReturn_B(OpReturnBase):
     - 'filename': (string) Name of the file 
     - 'media_type': (string) The media type of the data (defaults to 'text/plain')
     - 'encoding': (string) The encoding. (Defaults to UTF-8 if missing)
-
-    NOTE: if using the 'path' property, the agent will depend on the 'filetype' package
-                (pip install filetype)
     '''
 
     default_options = {
