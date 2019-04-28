@@ -179,20 +179,22 @@ class WriteEventToFile:
         return ','.join(arr)
 
     def writeToCSV(self, path, m, event):
+        keys = [i for i in event if i[0] != '_']
+        values = [event[i] for i in keys]
         if m == 'w':
             with open(path, m) as f:
-                f.write(self.listToCSVstr(event.keys()) + os.linesep)
-                f.write(self.listToCSVstr(event.values()) + os.linesep)
+                f.write(self.listToCSVstr(keys) + os.linesep)
+                f.write(self.listToCSVstr(values) + os.linesep)
             return
         else:
             if not os.path.exists(path):
                 with open(path, m) as f:
-                    f.write(self.listToCSVstr(event.keys()) + os.linesep)
-                    f.write(self.listToCSVstr(event.values()) + os.linesep)
+                    f.write(self.listToCSVstr(keys) + os.linesep)
+                    f.write(self.listToCSVstr(values) + os.linesep)
                 return
             else:
                 with open(path, m) as f:
-                    f.write(self.listToCSVstr(event.values()) + os.linesep)
+                    f.write(self.listToCSVstr(values) + os.linesep)
 
     def objToYAMLstr(self, obj, indent=0):
         if not hasattr(self, 'pyyaml'):
