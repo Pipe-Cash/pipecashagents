@@ -1,6 +1,5 @@
 import os
 import fnmatch
-import json
 
 class WatchDirectory:
 
@@ -59,7 +58,7 @@ class WatchDirectory:
             'path':p,
             'size':os.path.getsize(p),
             'mtime':os.path.getmtime(p),
-            'ctime':os.path.getctime(p)
+            'ctime':os.path.getctime(p),
         }
 
     def check(self, create_event):
@@ -95,10 +94,6 @@ class WatchDirectory:
             changedPaths = [p for p in paths if p in self.prev and self.prev[p] != files[p]]
             changedResults = [self.pathToPathObject(p, 'change') for p in changedPaths]
             results = results + changedResults
-
-        for c in [self.pathToPathObject(p, 'nothing') for p in paths]:
-            self.log.warn("event is : " + repr(c))
-            create_event(c)
 
         for c in results:
             create_event(c)
