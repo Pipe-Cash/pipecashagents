@@ -17,7 +17,7 @@ class ReadFile:
 
         Options:
         - 'path': path to the file to read
-        - 'format': default/base64
+        - 'format': utf8/hex/base64
 
         '''
 
@@ -25,17 +25,20 @@ class ReadFile:
 
         self.default_options = {
             'path': '/home/USERNAME/Desktop/test-folder/file.txt',
-            'format': 'default',
+            'format': 'utf8',
         }
 
         self.event_description = {
-            'fileContent': b'contents of file',
+            'fileContent': 'contents of file',
             'mimetypes': None, 
-            'path': '/home/alex/Desktop/test-folder/secrets.json'}
+            'path': '/home/alex/Desktop/test-folder/secrets.json',
+            'encoding': "utf8"
+        }
 
     def validate_options(self):
         assert 'path' in self.options, "'path' not in options"
         assert 'format' in self.options, "'track' not in options"
+        assert self.options['format'] in ['utf8','hex','base64'], "Unknown format: " + self.options['format'] 
 
     def check_dependencies_missing(self):
         import mimetypes
@@ -47,20 +50,24 @@ class ReadFile:
         if not os.path.exists(path):
             raise FileNotFoundError("File is missing: " + path)
         
-        with open(path, 'rb') as f:
-            fileContent = f.read()
+        if dataFormat == 'utf8':
+            with open(path, 'r') as f:
+                fileContent = f.read()
+        elif dataFormat == 'hex':
+            with open(path, 'rb') as f:
+                fileContent = f.read().hex()
+        elif dataFormat == 'base64':
+            with open(path, 'rb') as f:
+                fileContent = base64.b64encode(f.read()).decode()
+        else:
+            raise AttributeError("Unknown format : " + dataFormat)
 
         mime = self.mimetypes.guess_type(path)[0]
         mime = mime or 'application/binary'
-
-        if dataFormat == 'base64':
-            fileContent = base64.b64encode(fileContent)
 
         create_event({
             'fileContent': fileContent,
             'fileType': mime,
             'path': path,
+            'format': dataFormat
         })
-
-
-
