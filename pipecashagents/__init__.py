@@ -26,3 +26,4 @@ from pipecashagents.HandCash.GetHandCashAddress import *
 from pipecashagents.OS.WatchDir import *
 from pipecashagents.OS.ReadFile import *
 from pipecashagents.OS.Write import *
+from pipecashagents.OS.ShellCommand import *

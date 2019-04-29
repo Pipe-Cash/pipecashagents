@@ -37,6 +37,7 @@ class TestPipecashAgents(unittest.TestCase):
         "ReadFile",
         "WriteFile",
         "WriteEventToFile",
+        "ShellCommand",
         "OpReturn_B",
         "OpReturn_Bitcom",
         "OpReturn_EventAsJson",
