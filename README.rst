@@ -23,7 +23,7 @@ pipecashagents
 A collection of common agents used in PipeCash. Learn more about PipeCash on http://pipe.cash/
 
 
-* Free software: MIT license
+* License: OPEN BLOCKCHAIN-SPECIFIC LICENSE
 * Documentation: https://pipecashagents.readthedocs.io.
 
 
