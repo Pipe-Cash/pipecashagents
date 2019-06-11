@@ -2,6 +2,12 @@
 pipecashagents
 ===============
 
+A collection of common agents used in PipeCash. Learn more about PipeCash on http://pipe.cash/
+
+
+* License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
+* Documentation: https://pipecashagents.readthedocs.io.
+
 
 .. image:: https://img.shields.io/pypi/v/pipecashagents.svg
         :target: https://pypi.python.org/pypi/pipecashagents
@@ -17,16 +23,6 @@ pipecashagents
 .. image:: https://pyup.io/repos/github/Pipe-Cash/pipecashagents/shield.svg
      :target: https://pyup.io/repos/github/Pipe-Cash/pipecashagents/
      :alt: Updates
-
-
-
-A collection of common agents used in PipeCash. Learn more about PipeCash on http://pipe.cash/
-
-
-* License: OPEN BLOCKCHAIN-AND-FIAT-SPECIFIC LICENSE
-* Documentation: https://pipecashagents.readthedocs.io.
-
-
 
 
 Installation
